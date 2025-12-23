@@ -1,16 +1,21 @@
-import { Client } from "discord.js"
+import { Client, GatewayIntentBits, Partials } from "discord.js"
 import "dotenv/config"
 
 import ready from "./events/clientReady"
 import interactionCreate from "./events/interactionCreate"
 
-const client = new Client({
+const client: Client<boolean> = new Client({
     intents: [
-        "MessageContent",
-        "GuildMessages",
-        "GuildMessageReactions",
-        "DirectMessages",
-        "DirectMessageReactions"
+        GatewayIntentBits.MessageContent,
+        GatewayIntentBits.Guilds,
+        GatewayIntentBits.GuildMessages,
+        GatewayIntentBits.GuildMessageReactions,
+        GatewayIntentBits.GuildMembers
+    ],
+    partials: [
+        Partials.Message,
+        Partials.Channel,
+        Partials.Reaction
     ]
 })
 
