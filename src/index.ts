@@ -3,7 +3,7 @@ import "dotenv/config"
 
 import ready from "./events/clientReady"
 import interactionCreate from "./events/interactionCreate"
-import messageReactionAdd from "./events/messageReactionAdd"
+import messageReaction from "./events/messageReaction"
 
 const client: Client<boolean> = new Client({
     intents: [
@@ -23,6 +23,6 @@ const client: Client<boolean> = new Client({
 
 ready(client)
 interactionCreate(client)
-messageReactionAdd(client)
+messageReaction(client)
 
 client.login(process.env.TOKEN)
