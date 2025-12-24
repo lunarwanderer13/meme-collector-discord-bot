@@ -81,7 +81,7 @@ async function messageReaction(
                 const index: number = reactions.findIndex(r => r.id === reaction.emoji.identifier)
                 reactions.splice(index, 1)
             }
-        } else {
+        } else if (delta > 0) {
             reactions.push({
                 id: reaction.emoji.identifier,
                 name: reaction.emoji.name ?? reaction.emoji.id ?? "",
