@@ -1,5 +1,7 @@
+import { client, EmojiObject, ScoreEntry } from "./../index"
 import fs from "fs"
 import schedule from "node-schedule"
+import "dotenv/config"
 
 // Logging function
 function log(level: string, message: string): void {
@@ -7,22 +9,13 @@ function log(level: string, message: string): void {
     console.log(`[${timestamp}] [${level}]: ${message}`)
 }
 
-// Define a type for the emoji object
-interface EmojiObject {
-    id: string,
-    name: string,
-    count: number
+function load(): ScoreEntry[] {
+    return JSON.parse(fs.readFileSync("src/logs/memes.json", "utf-8"))
 }
 
-// Define a type for the entry
-interface ScoreEntry {
-    id: string,
-    username: string,
-    reactions: {
-        weekly: EmojiObject[],
-        monthly: EmojiObject[],
-        yearly: EmojiObject[]
-    }
+function save(data: ScoreEntry[]): void {
+    fs.writeFileSync("src/logs/memes.json", JSON.stringify(data, null, 4))
+    log("LOG", `Resetted weekly reaction scores.`)
 }
 
 
@@ -46,7 +39,7 @@ interface ScoreEntry {
 // Weekly reset
 schedule.scheduleJob("0 0 * * 1", () => { // every monday
     // Get the scores and the entry
-    const scores: ScoreEntry[] = JSON.parse(fs.readFileSync("src/logs/memes.json", "utf-8"))
+    const scores: ScoreEntry[] = load()
 
     // Reset the weekly scores
     for (const score of scores) {
@@ -54,14 +47,13 @@ schedule.scheduleJob("0 0 * * 1", () => { // every monday
     }
 
     // Save scores to the memes.json file
-    fs.writeFileSync("src/logs/memes.json", JSON.stringify(scores, null, 4))
-    log("LOG", `Resetted weekly reaction scores.`)
+    save(scores)
 })
 
 // Monthly reset
 schedule.scheduleJob("0 0 1 * *", () => { // every 1st of the month
     // Get the scores and the entry
-    const scores: ScoreEntry[] = JSON.parse(fs.readFileSync("src/logs/memes.json", "utf-8"))
+    const scores: ScoreEntry[] = load()
 
     // Reset the monthly scores
     for (const score of scores) {
@@ -69,14 +61,13 @@ schedule.scheduleJob("0 0 1 * *", () => { // every 1st of the month
     }
 
     // Save scores to the memes.json file
-    fs.writeFileSync("src/logs/memes.json", JSON.stringify(scores, null, 4))
-    log("LOG", `Resetted monthly reaction scores.`)
+    save(scores)
 })
 
 // Yearly reset
 schedule.scheduleJob("0 0 1 1 *", () => { // every Jan 1st
     // Get the scores and the entry
-    const scores: ScoreEntry[] = JSON.parse(fs.readFileSync("src/logs/memes.json", "utf-8"))
+    const scores: ScoreEntry[] = load()
 
     // Reset the yearly scores
     for (const score of scores) {
@@ -84,6 +75,5 @@ schedule.scheduleJob("0 0 1 1 *", () => { // every Jan 1st
     }
 
     // Save scores to the memes.json file
-    fs.writeFileSync("src/logs/memes.json", JSON.stringify(scores, null, 4))
-    log("LOG", `Resetted yearly reaction scores.`)
+    save(scores)
 })

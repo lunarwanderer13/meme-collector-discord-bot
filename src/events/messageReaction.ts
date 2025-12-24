@@ -3,6 +3,7 @@ import {
     User, PartialUser,
     MessageReaction, PartialMessageReaction
 } from "discord.js"
+import { EmojiObject, ScoreEntry } from "./../index"
 import fs from "fs"
 import "dotenv/config"
 
@@ -30,24 +31,6 @@ async function messageReaction(
     if (!author) return
 
 
-
-    // Define a type for the emoji object
-    interface EmojiObject {
-        id: string,
-        name: string,
-        count: number
-    }
-
-    // Define a type for the entry
-    interface ScoreEntry {
-        id: string,
-        username: string,
-        reactions: {
-            weekly: EmojiObject[],
-            monthly: EmojiObject[],
-            yearly: EmojiObject[]
-        }
-    }
 
     // Get the scores and the entry
     const scores: ScoreEntry[] = JSON.parse(fs.readFileSync("src/logs/memes.json", "utf-8"))

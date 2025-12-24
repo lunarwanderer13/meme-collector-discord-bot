@@ -6,7 +6,7 @@ import interactionCreate from "./events/interactionCreate"
 import messageReaction from "./events/messageReaction"
 import "./utils/memes-reset"
 
-const client: Client<boolean> = new Client({
+export const client: Client<boolean> = new Client({
     intents: [
         GatewayIntentBits.MessageContent,
         GatewayIntentBits.Guilds,
@@ -21,6 +21,24 @@ const client: Client<boolean> = new Client({
         Partials.User
     ]
 })
+
+// Define a type for the emoji object
+export interface EmojiObject {
+    id: string,
+    name: string,
+    count: number
+}
+
+// Define a type for the entry
+export interface ScoreEntry {
+    id: string,
+    username: string,
+    reactions: {
+        weekly: EmojiObject[],
+        monthly: EmojiObject[],
+        yearly: EmojiObject[]
+    }
+}
 
 ready(client)
 interactionCreate(client)
