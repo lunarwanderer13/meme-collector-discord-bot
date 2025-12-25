@@ -80,13 +80,14 @@ async function best_memer(type: "weekly" | "monthly" | "yearly", scores: ScoreEn
             .setColor("#ff6432")
             .setTitle(title)
             .setDescription(description)
-            try {
-                const member = await guild.members.fetch(winner.id)
-                embed.setThumbnail(member.displayAvatarURL())
-            } catch {
-                const user = await client.users.fetch(winner.id)
-                embed.setThumbnail(user.displayAvatarURL())
-            }
+
+        try {
+            const member = await guild.members.fetch(winner.id)
+            embed.setThumbnail(member.displayAvatarURL())
+        } catch {
+            const user = await client.users.fetch(winner.id)
+            embed.setThumbnail(user.displayAvatarURL())
+        }
 
         await meme_channel.send({ content: `${await client.users.fetch(winner.id)}`, embeds: [embed] })
     } catch {
