@@ -54,7 +54,32 @@ async function messageReaction(
     }
 
     // Loop through all reaction arrays
-    for (const reactions of Object.values(entry.reactions)) {
+    for (const [type, reactions] of Object.entries(entry.reactions)) {
+        const now: Date = new Date()
+        const messageDate: Date = reaction.message.createdAt
+
+        let valid: Boolean = false
+        switch (type) {
+            case "weekly":
+                // Kudos to Michael Lynch https://stackoverflow.com/a/63588590
+                const todayDate = now.getDate()
+                const todayDay = now.getDay()
+                const firstDayOfWeek = new Date(now.setDate(todayDate - todayDay))
+                const lastDayOfWeek = new Date(firstDayOfWeek)
+                lastDayOfWeek.setDate(lastDayOfWeek.getDate() + 6)
+
+                if (messageDate >= firstDayOfWeek && messageDate <= lastDayOfWeek) valid = true
+                break
+            case "monthly":
+                if (now.getMonth() === messageDate.getMonth()) valid = true
+                break
+            case "yearly":
+                if (now.getFullYear() === messageDate.getFullYear()) valid = true
+                break
+        }
+
+        if (!valid) continue
+
         const emoji: EmojiObject | undefined = reactions.find(r => r.id === reaction.emoji.identifier)
 
         if (emoji) {
