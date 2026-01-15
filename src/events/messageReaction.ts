@@ -21,7 +21,7 @@ async function messageReaction(
     if (reaction.message.author === user) return
 
     // Check for attachments
-    if (reaction.message.attachments.size <= 0) return
+    //if (reaction.message.attachments.size <= 0) return
 
     // Check for the right channel
     if (reaction.message.channel.id !== process.env.MEME_ID) return
